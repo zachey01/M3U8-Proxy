@@ -594,9 +594,19 @@ export async function proxyTs(url: string, headers: any, req, res: http.ServerRe
     };
     // Proxy request and pipe to client
     try {
+        let proxy;
         if (forceHTTPS) {
-            const proxy = https.request(options, (r) => {
+            proxy = https.request(options, (r) => {
+                // Set content type
                 r.headers["content-type"] = "video/mp2t";
+                // Add CORS headers
+                r.headers["access-control-allow-origin"] = "*";
+                r.headers["access-control-allow-headers"] = "*";
+                r.headers["access-control-allow-methods"] = "*";
+                // Remove unnecessary headers
+                ["access-control-allow-origin", "access-control-allow-methods", "access-control-allow-headers", "access-control-max-age", "access-control-allow-credentials", "access-control-expose-headers", "access-control-request-method", "access-control-request-headers", "origin", "vary", "referer", "server", "x-cache", "via", "x-amz-cf-pop", "x-amz-cf-id"].forEach((header) => {
+                    delete r.headers[header.toLowerCase()];
+                });
                 res.writeHead(r.statusCode ?? 200, r.headers);
                 r.pipe(res, {
                     end: true,
@@ -606,8 +616,17 @@ export async function proxyTs(url: string, headers: any, req, res: http.ServerRe
                 end: true,
             });
         } else {
-            const proxy = http.request(options, (r) => {
+            proxy = http.request(options, (r) => {
+                // Set content type
                 r.headers["content-type"] = "video/mp2t";
+                // Add CORS headers
+                r.headers["access-control-allow-origin"] = "*";
+                r.headers["access-control-allow-headers"] = "*";
+                r.headers["access-control-allow-methods"] = "*";
+                // Remove unnecessary headers
+                ["access-control-allow-origin", "access-control-allow-methods", "access-control-allow-headers", "access-control-max-age", "access-control-allow-credentials", "access-control-expose-headers", "access-control-request-method", "access-control-request-headers", "origin", "vary", "referer", "server", "x-cache", "via", "x-amz-cf-pop", "x-amz-cf-id"].forEach((header) => {
+                    delete r.headers[header.toLowerCase()];
+                });
                 res.writeHead(r.statusCode ?? 200, r.headers);
                 r.pipe(res, {
                     end: true,
