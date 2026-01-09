@@ -15,7 +15,7 @@
         },
         "PUBLIC_URL": {
             "description": "Public URL for the proxy to run on.",
-            "value": "http://localhost:3000"
+            "value": "https://m3-u8-proxy-chi-weld.vercel.app"
         }
     }
 }
